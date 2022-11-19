@@ -1,4 +1,4 @@
-using Infrastructure.Configurations;
+using Api.Chat;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -8,6 +8,8 @@ var connectionString = config.GetConnectionString("Postgres")
 	?? throw new InvalidOperationException("Connection string not passed");
 
 services.AddControllers();
+services.AddSignalR();
+
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 
@@ -26,5 +28,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/api/chat");
 
 app.Run();

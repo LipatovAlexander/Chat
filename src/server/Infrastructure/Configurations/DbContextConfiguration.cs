@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Configurations;
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DbContextConfiguration
 {
