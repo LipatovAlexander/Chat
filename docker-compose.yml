@@ -18,7 +18,7 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
-      
+  
   migrator:
     container_name: 'migrator'
     build:
@@ -28,4 +28,20 @@ services:
       - ConnectionStrings__Postgres=Host=postgres;Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
     depends_on:
       postgres:
-        condition: service_healthy    
+        condition: service_healthy
+  
+  api:
+    container_name: 'api'
+    build:
+      context: .
+      dockerfile: ./src/server/Api/Dockerfile
+    environment:
+      - ConnectionStrings__Postgres=Host=postgres;Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=${POSTGRES_DB}
+    ports:
+      - ${API_HTTP_PORT}:80
+      - ${API_HTTPS_PORT}:443
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully 
