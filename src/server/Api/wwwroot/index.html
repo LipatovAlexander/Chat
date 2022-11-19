@@ -22,6 +22,17 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
+        const discussion = document.getElementById('discussion');
+    
+        fetch('/api/History')
+            .then(response => response.json())
+            .then((messages) => {
+                for (const message of messages) {
+                    const liElement = document.createElement('li');
+                    liElement.innerHTML = '<strong>' + message.ip + '</strong>:&nbsp;&nbsp;' + message.text;
+                    discussion.appendChild(liElement);
+                }
+            });
 
         const messageInput = document.getElementById('message');
 
@@ -35,7 +46,7 @@
         connection.on('ReceiveMessage', function (message) {
             const liElement = document.createElement('li');
             liElement.innerHTML = '<strong>' + message.ip + '</strong>:&nbsp;&nbsp;' + message.text;
-            document.getElementById('discussion').appendChild(liElement);
+            discussion.appendChild(liElement);
         });
 
         connection.start()
