@@ -18,22 +18,11 @@ services.AddControllers();
 services.AddSignalR();
 services.AddMassTransit(brokerSettings);
 
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-
 services.AddApplicationDbContext(connectionStringSettings);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseFileServer();
 
 app.MapControllers();
 app.MapHub<ChatHub>("/api/chat");

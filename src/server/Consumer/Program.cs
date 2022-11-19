@@ -1,3 +1,4 @@
+using Consumer;
 using Infrastructure.Configurations.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,10 @@ var brokerSettings = config
 		.Get<BrokerSettings>()
 	?? throw new InvalidOperationException("Broker settings not passed");
 
-services.AddMassTransit(brokerSettings);
+services.AddMassTransit(brokerSettings, configurator =>
+{
+	configurator.AddConsumer<MessageConsumer>();
+});
 services.AddApplicationDbContext(connectionStringSettings);
 
 var app = builder.Build();

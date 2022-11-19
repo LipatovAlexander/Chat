@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+﻿using Api.Mappers;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
@@ -13,10 +13,12 @@ public sealed class ChatHub : Hub
 		_bus = bus;
 	}
 
-	public async Task SendMessageAsync(Message message, CancellationToken cancellationToken = default)
+	public async Task SendMessage(SendMessageRequest request)
 	{
-		await _bus.Publish(message, cancellationToken);
+		var message = request.MapToMessage();
 
-		await Clients.All.SendAsync("ReceiveMessage", message, cancellationToken);
+		await _bus.Publish(message);
+
+		await Clients.All.SendAsync("ReceiveMessage", message);
 	}
 }
