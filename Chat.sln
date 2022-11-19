@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrator", "src\server\Migrator\Migrator.csproj", "{3532C9D9-E549-46F6-B182-13DF7C242A75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\server\Domain\Domain.csproj", "{39439176-536B-4438-B120-88F460D78F24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\server\Infrastructure\Infrastructure.csproj", "{A8CFB2F6-FF6A-4624-A124-67E879C1C15A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{3532C9D9-E549-46F6-B182-13DF7C242A75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3532C9D9-E549-46F6-B182-13DF7C242A75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3532C9D9-E549-46F6-B182-13DF7C242A75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39439176-536B-4438-B120-88F460D78F24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39439176-536B-4438-B120-88F460D78F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39439176-536B-4438-B120-88F460D78F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39439176-536B-4438-B120-88F460D78F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8CFB2F6-FF6A-4624-A124-67E879C1C15A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8CFB2F6-FF6A-4624-A124-67E879C1C15A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8CFB2F6-FF6A-4624-A124-67E879C1C15A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8CFB2F6-FF6A-4624-A124-67E879C1C15A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

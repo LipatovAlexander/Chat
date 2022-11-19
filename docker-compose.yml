@@ -1,6 +1,6 @@
 volumes:
   data:
-  
+
 services:
   postgres:
     container_name: 'postgres'
