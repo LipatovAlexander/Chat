@@ -5,14 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var config = builder.Configuration;
 
-var connectionStringSettings = config
-		.GetSection(ConnectionStringsSettings.SectionName)
-		.Get<ConnectionStringsSettings>()
-	?? throw new InvalidOperationException("Connection string settings not passed");
-var brokerSettings = config
-		.GetSection(BrokerSettings.SectionName)
-		.Get<BrokerSettings>()
-	?? throw new InvalidOperationException("Broker settings not passed");
+var connectionStringSettings = config.GetSettings<ConnectionStringsSettings>();
+var brokerSettings = config.GetSettings<BrokerSettings>();
 
 services.AddMassTransit(brokerSettings, configurator =>
 {

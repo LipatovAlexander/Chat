@@ -5,12 +5,10 @@ namespace Api.Mappers;
 
 public static class MessageMapper
 {
-	public static Message MapToMessage(this SendMessageRequest request)
+	public static Message MapToMessage(this SendMessageRequest request) => new()
 	{
-		return new Message
-		{
-			Ip = request.Ip,
-			Text = request.Text
-		};
-	}
+		Ip = request.Ip,
+		Text = request.Text,
+		FileId = request.FileId
+	};
 }
