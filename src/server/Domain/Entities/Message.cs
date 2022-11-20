@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities;
-
-[Table(nameof(Message))]
 public sealed class Message
 {
 	public int Id { get; set; }

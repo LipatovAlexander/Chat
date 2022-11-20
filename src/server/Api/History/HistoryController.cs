@@ -19,6 +19,6 @@ public sealed class HistoryController : ControllerBase
 	[HttpGet]
 	public async Task<ActionResult<List<Message>>> GetHistory()
 	{
-		return await _dbContext.Messages.ToListAsync();
+		return await _dbContext.Messages.AsNoTracking().ToListAsync();
 	}
 }
