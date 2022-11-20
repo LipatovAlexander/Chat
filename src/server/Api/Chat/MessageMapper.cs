@@ -1,7 +1,6 @@
-﻿using Api.Chat;
-using Domain.Entities;
+﻿using Domain.Entities;
 
-namespace Api.Mappers;
+namespace Api.Chat;
 
 public static class MessageMapper
 {

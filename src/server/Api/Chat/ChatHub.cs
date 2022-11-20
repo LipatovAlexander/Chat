@@ -1,5 +1,4 @@
-﻿using Api.Mappers;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Api.Chat;
