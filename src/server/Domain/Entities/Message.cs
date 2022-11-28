@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities;
-
-[Table(nameof(Message))]
 public sealed class Message
 {
-	public int Id { get; set; }
+	public string Id { get; set; } = Guid.NewGuid().ToString();
 	public required string Ip { get; set; }
 	public required string Text { get; set; }
+	public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 }
