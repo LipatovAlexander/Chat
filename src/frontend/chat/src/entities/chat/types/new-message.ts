@@ -1,4 +1,4 @@
-export default interface NewMessage {
+export interface NewMessage {
     ip: string
     text: string
 }

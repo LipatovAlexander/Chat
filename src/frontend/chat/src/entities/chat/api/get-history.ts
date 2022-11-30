@@ -1,8 +1,8 @@
 import { api } from 'shared/api'
-import { Message } from '../types'
+import { MessageResp } from '../types/message'
 
 const getHistory = async () => {
-    return await api.get<Message[]>('History')
+    return await api.get<MessageResp[]>('History')
 }
 
 export default getHistory

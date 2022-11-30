@@ -28,7 +28,8 @@ const ChatBody = () => {
                     <Spin size="large" />
                 </LoadingArea>
             )}
-            {!chatLoading && messages.map((message) => <Message message={message} isOwn={isOwn(message.ip)} />)}
+            {!chatLoading &&
+                messages.map((message) => <Message key={message.id} message={message} isOwn={isOwn(message.ip)} />)}
         </ChatBodyBlock>
     )
 }

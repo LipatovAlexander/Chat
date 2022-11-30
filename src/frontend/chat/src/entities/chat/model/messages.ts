@@ -9,7 +9,11 @@ const loadMessages = createEvent()
 
 const loadMessagesFx = createEffect(async () => {
     const history = await getHistory()
-    return history.data
+
+    return history.data.map((m) => ({
+        ...m,
+        createdAt: new Date(m.createdAt),
+    }))
 })
 
 forward({
@@ -17,9 +21,10 @@ forward({
     to: loadMessagesFx,
 })
 
-forward({
-    from: loadMessagesFx.doneData,
-    to: $messages,
+sample({
+    clock: loadMessagesFx.doneData,
+    fn: (messages) => messages.sort((m1, m2) => m1.createdAt.getTime() - m2.createdAt.getTime()),
+    target: $messages,
 })
 
 const addNewMessage = createEvent<Message>()
@@ -27,7 +32,7 @@ const addNewMessage = createEvent<Message>()
 sample({
     clock: addNewMessage,
     source: $messages,
-    fn: (messages, newMessage) => [...messages, newMessage],
+    fn: (messages, newMessage) => [...messages, { ...newMessage, createdAt: new Date(newMessage.createdAt) }],
     target: $messages,
 })
 
