@@ -86,3 +86,16 @@ services:
         condition: service_healthy
       migrator:
         condition: service_completed_successfully 
+  
+  frontend:
+    container_name: 'frontend'
+    build:
+      context: ./src/frontend/
+      dockerfile: ./chat/dockerfile
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL}
+    ports:
+      - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
+    volumes:
+      - ./src/frontend/chat/src:/app/src
+        
