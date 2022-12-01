@@ -1,6 +1,6 @@
 import { createEffect, createEvent, createStore, forward, sample } from 'effector'
 import * as signalR from '@microsoft/signalr'
-import NewMessage from '../types/new-message'
+import { NewMessage } from '../types/new-message'
 import { useStore } from 'effector-react'
 import { connectToChatAndConfigure } from '../api'
 

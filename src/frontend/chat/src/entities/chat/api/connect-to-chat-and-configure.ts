@@ -1,11 +1,11 @@
 import * as signalR from '@microsoft/signalr'
 import { messages } from '../model'
-import { Message } from '../types'
+import { MessageResp } from '../types/message'
 
 const connectToChatAndConfigure = async () => {
     const connection = new signalR.HubConnectionBuilder().withUrl(`${process.env.REACT_APP_API_URL}/api/chat`).build()
 
-    connection.on('ReceiveMessage', (message: Message) => {
+    connection.on('ReceiveMessage', (message: MessageResp) => {
         messages.events.addNewMessage(message)
     })
 
