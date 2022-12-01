@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { SendOutlined } from '@ant-design/icons'
-import { Tooltip, Button } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { chatModel } from 'entities/chat'
 import { userModel } from 'entities/user'
+import { SendButton } from './ui/send-button'
 
 const ChatControll = () => {
     const [text, setText] = useState('')
@@ -21,20 +20,17 @@ const ChatControll = () => {
         chatModel.connection.events.connectToChat()
     }, [])
 
-    const sendMessage = useCallback(
-        (text: string) => {
-            if (!messageSending) {
-                chatModel.connection.events.sendMessage({ ip: userIp.ipV4, text: text })
-                setText('')
-            }
-        },
-        [userIp],
-    )
+    const sendMessage = () => {
+        if (!messageSending) {
+            chatModel.connection.events.sendMessage({ ip: userIp.ipV4, text: text })
+            setText('')
+        }
+    }
 
     const onPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (!e.shiftKey) {
             e.preventDefault()
-            sendMessage(text)
+            sendMessage()
         }
     }
 
@@ -47,15 +43,7 @@ const ChatControll = () => {
                 onChange={(e) => setText(e.target.value)}
                 onPressEnter={onPressEnter}
             />
-            <SendButton>
-                <Tooltip title={'Отправить'}>
-                    <Button
-                        disabled={messageSending || chatLoading}
-                        icon={<SendOutlined />}
-                        onClick={() => sendMessage(text)}
-                    />
-                </Tooltip>
-            </SendButton>
+            <SendButton onClick={sendMessage} disabled={messageSending || chatLoading} />
         </ChatControllBlock>
     )
 }
@@ -65,10 +53,6 @@ const ChatControllBlock = styled.div`
     display: flex;
     align-items: center;
     padding: 0 10px 0 10px;
-`
-
-const SendButton = styled.div`
-    margin-left: 10px;
 `
 
 export default ChatControll
