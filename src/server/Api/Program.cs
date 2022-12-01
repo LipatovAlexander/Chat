@@ -1,5 +1,6 @@
 using Api.Chat;
 using Infrastructure.Configurations;
+using Api.Extensions;
 using Infrastructure.Configurations.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +18,13 @@ services.AddMassTransit(brokerSettings);
 services.AddAmazonS3(amazonS3Settings);
 services.AddFileService();
 
+services.AddCors();
+
 services.AddApplicationDbContext(connectionStringSettings);
 
 var app = builder.Build();
+
+app.UseCorsForFrontend(config);
 
 app.UseFileServer();
 
