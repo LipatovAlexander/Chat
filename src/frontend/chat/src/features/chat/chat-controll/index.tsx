@@ -1,55 +1,49 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import TextArea from 'antd/es/input/TextArea'
 import { chatModel } from 'entities/chat'
 import { userModel } from 'entities/user'
-import { SendButton } from './ui/send-button'
+import { Form } from 'antd'
+import { MessageForm } from './types/message-from'
+import { ChatInput } from './ui/chat-input'
+import { ChatButtons } from './ui/chat-buttons'
 
 const ChatControll = () => {
-    const [text, setText] = useState('')
+    const [form] = Form.useForm<MessageForm>()
     const userIp = userModel.useCurrentUserIp()
 
     const chatConnecting = chatModel.connection.useIsConnected()
     const userIpLoading = userModel.useUserIpLoading()
-
-    const chatLoading = chatConnecting || userIpLoading
-
     const messageSending = chatModel.connection.useMessageSending()
+    const chatLoading = chatConnecting || userIpLoading
 
     useEffect(() => {
         chatModel.connection.events.connectToChat()
     }, [])
 
-    const sendMessage = () => {
-        if (!messageSending) {
-            chatModel.connection.events.sendMessage({ ip: userIp.ipV4, text: text })
-            setText('')
-        }
-    }
-
-    const onPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (!e.shiftKey) {
-            e.preventDefault()
-            sendMessage()
-        }
-    }
+    const sendMessage = useCallback(
+        (newMessage: MessageForm) => {
+            if (!messageSending && newMessage.text) {
+                chatModel.connection.events.sendMessage({
+                    text: newMessage.text,
+                    fileId: newMessage.file?.response?.id,
+                    ip: userIp.ipV4,
+                })
+                form.resetFields()
+            }
+        },
+        [userIp, form, messageSending],
+    )
 
     return (
-        <ChatControllBlock>
-            <TextArea
-                disabled={chatLoading}
-                value={text}
-                autoSize={{ minRows: 3, maxRows: 3 }}
-                onChange={(e) => setText(e.target.value)}
-                onPressEnter={onPressEnter}
-            />
-            <SendButton onClick={sendMessage} disabled={messageSending || chatLoading} />
+        <ChatControllBlock form={form} onFinish={sendMessage}>
+            <ChatInput chatLoading={chatLoading} sendMessage={sendMessage} form={form} />
+            <ChatButtons form={form} buttonsDisabled={chatLoading} />
         </ChatControllBlock>
     )
 }
 
-const ChatControllBlock = styled.div`
-    height: 10%;
+const ChatControllBlock = styled(Form<MessageForm>)`
+    height: 15%;
     display: flex;
     align-items: center;
     padding: 0 10px 0 10px;

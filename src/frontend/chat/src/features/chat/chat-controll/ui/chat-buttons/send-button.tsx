@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 type SendButtonProps = ButtonProps
 
-export const SendButton = (props: SendButtonProps) => {
+export const SendButton = ({ ...props }: SendButtonProps) => {
     return (
         <Block>
             <Tooltip title={'Отправить'}>

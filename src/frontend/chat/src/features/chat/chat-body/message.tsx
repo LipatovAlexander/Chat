@@ -1,6 +1,8 @@
 import React from 'react'
 import { Message as MessageType } from 'entities/chat'
 import styled from 'styled-components'
+import { LinkToFile } from 'shared/ui'
+import { urlToFile } from 'shared/consts'
 
 interface MessageProps {
     message: MessageType
@@ -13,6 +15,7 @@ const Message = ({ message, isOwn }: MessageProps) => {
             <Content isOwn={isOwn}>
                 <Username>{message.ip}</Username>
                 <Text>{message.text}</Text>
+                {message.fileId && <File link={`${urlToFile}?id=${message.fileId}`} />}
             </Content>
         </MessageBlock>
     )
@@ -42,6 +45,10 @@ const Username = styled.div`
 
 const Text = styled.div`
     word-wrap: break-word;
+`
+
+const File = styled(LinkToFile)`
+    margin-top: 5px;
 `
 
 export default React.memo(Message)
