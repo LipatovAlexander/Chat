@@ -1,74 +1,52 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import { SendOutlined } from '@ant-design/icons'
-import { Tooltip, Button } from 'antd'
-import TextArea from 'antd/es/input/TextArea'
 import { chatModel } from 'entities/chat'
 import { userModel } from 'entities/user'
+import { Form } from 'antd'
+import { MessageForm } from './types/message-from'
+import { ChatInput } from './ui/chat-input'
+import { ChatButtons } from './ui/chat-buttons'
 
 const ChatControll = () => {
-    const [text, setText] = useState('')
+    const [form] = Form.useForm<MessageForm>()
     const userIp = userModel.useCurrentUserIp()
 
     const chatConnecting = chatModel.connection.useIsConnected()
     const userIpLoading = userModel.useUserIpLoading()
-
-    const chatLoading = chatConnecting || userIpLoading
-
     const messageSending = chatModel.connection.useMessageSending()
+    const chatLoading = chatConnecting || userIpLoading
 
     useEffect(() => {
         chatModel.connection.events.connectToChat()
     }, [])
 
     const sendMessage = useCallback(
-        (text: string) => {
-            if (!messageSending) {
-                chatModel.connection.events.sendMessage({ ip: userIp.ipV4, text: text })
-                setText('')
+        (newMessage: MessageForm) => {
+            if (!messageSending && newMessage.text) {
+                chatModel.connection.events.sendMessage({
+                    text: newMessage.text,
+                    fileId: newMessage.file?.response?.id,
+                    ip: userIp.ipV4,
+                })
+                form.resetFields()
             }
         },
-        [userIp],
+        [userIp, form, messageSending],
     )
 
-    const onPressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (!e.shiftKey) {
-            e.preventDefault()
-            sendMessage(text)
-        }
-    }
-
     return (
-        <ChatControllBlock>
-            <TextArea
-                disabled={chatLoading}
-                value={text}
-                autoSize={{ minRows: 3, maxRows: 3 }}
-                onChange={(e) => setText(e.target.value)}
-                onPressEnter={onPressEnter}
-            />
-            <SendButton>
-                <Tooltip title={'Отправить'}>
-                    <Button
-                        disabled={messageSending || chatLoading}
-                        icon={<SendOutlined />}
-                        onClick={() => sendMessage(text)}
-                    />
-                </Tooltip>
-            </SendButton>
+        <ChatControllBlock form={form} onFinish={sendMessage}>
+            <ChatInput chatLoading={chatLoading} sendMessage={sendMessage} form={form} />
+            <ChatButtons form={form} buttonsDisabled={chatLoading} />
         </ChatControllBlock>
     )
 }
 
-const ChatControllBlock = styled.div`
-    height: 10%;
+const ChatControllBlock = styled(Form<MessageForm>)`
+    height: 15%;
     display: flex;
     align-items: center;
     padding: 0 10px 0 10px;
-`
-
-const SendButton = styled.div`
-    margin-left: 10px;
 `
 
 export default ChatControll

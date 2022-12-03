@@ -1,8 +1,10 @@
-﻿namespace Api.Configurations.Settings;
+﻿using Infrastructure.Configurations.Settings;
 
-public class FrontendSettings
+namespace Api.Configurations.Settings;
+
+public class FrontendSettings: ISettings
 {
-	public static readonly string SectionName = "Frontend";
+	public static string SectionName => "Frontend";
 	
 	public required string Url { get; set; }
 }

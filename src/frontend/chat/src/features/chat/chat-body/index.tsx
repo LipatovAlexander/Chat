@@ -38,7 +38,7 @@ const ChatBodyBlock = styled(AutoScroll)`
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 90%;
+    height: 85%;
     grid-row-gap: 10px;
 `
 
