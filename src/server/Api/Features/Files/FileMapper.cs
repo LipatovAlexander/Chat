@@ -1,6 +1,6 @@
 using File = Domain.Entities.File;
 
-namespace Api.Files;
+namespace Api.Features.Files;
 
 public static class FileMapper
 {

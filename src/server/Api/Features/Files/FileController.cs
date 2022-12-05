@@ -1,7 +1,7 @@
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Files;
+namespace Api.Features.Files;
 
 [ApiController]
 [Route("api/[controller]")]

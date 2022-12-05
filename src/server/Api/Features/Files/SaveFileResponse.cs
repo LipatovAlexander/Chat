@@ -1,4 +1,4 @@
-namespace Api.Files;
+namespace Api.Features.Files;
 
 public sealed class SaveFileResponse
 {

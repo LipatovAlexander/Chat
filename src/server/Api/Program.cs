@@ -1,6 +1,6 @@
-using Api.Chat;
 using Infrastructure.Configurations;
 using Api.Extensions;
+using Api.Features.Chat;
 using Infrastructure.Configurations.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
