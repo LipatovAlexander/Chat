@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Domain.Events;
+using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Api.Features.Chat;
@@ -16,7 +17,8 @@ public sealed class ChatHub : Hub
 	{
 		var message = request.MapToMessage();
 
-		await _bus.Publish(message);
+		var messageCreated = new MessageCreatedEvent(message);
+		await _bus.Publish(messageCreated);
 
 		await Clients.All.SendAsync("ReceiveMessage", message);
 	}

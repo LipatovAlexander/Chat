@@ -10,7 +10,7 @@ var brokerSettings = config.GetSettings<BrokerSettings>();
 
 services.AddMassTransit(brokerSettings, configurator =>
 {
-	configurator.AddConsumer<MessageConsumer>();
+	configurator.AddConsumer<MessageCreatedConsumer>();
 });
 services.AddApplicationDbContext(connectionStringSettings);
 
