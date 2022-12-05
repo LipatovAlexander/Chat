@@ -10,5 +10,5 @@ public static class FileMapper
 		ContentType = formFile.ContentType
 	};
 
-	public static SaveFileResponse MapToResponse(this File file) => new() { Id = file.Id };
+	public static UploadFileResponse MapToResponse(this File file) => new() { Id = file.Id };
 }

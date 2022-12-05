@@ -15,9 +15,9 @@ public sealed class FileController : ControllerBase
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> SaveFile([FromForm(Name = "file")] IFormFile formFile)
+	public async Task<IActionResult> SaveFile(UploadFileRequest request)
 	{
-		var file = formFile.MapToFile();
+		var file = request.FormFile.MapToFile();
 	
 		await _fileService.SaveAsync(file);
 
