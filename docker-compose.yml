@@ -15,9 +15,9 @@ services:
       - data:/var/lib/postgresql
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready", "-d", '${POSTGRES_DB}' ]
-      interval: 10s
-      timeout: 10s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 5
   
   migrator:
     container_name: 'migrator'
@@ -44,12 +44,12 @@ services:
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     healthcheck:
       test: rabbitmq-diagnostics -q status
-      interval: 10s
-      timeout: 10s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 5
       
   s3:
-    container_name: s3
+    container_name: 's3'
     image: minio/minio
     command: server --console-address ":9001" /data/
     ports:
@@ -60,6 +60,22 @@ services:
       MINIO_ROOT_PASSWORD: ${S3_SECRET_KEY}
     volumes:
       - ~/s3/data:/data
+      
+  redis:
+    container_name: 'redis'
+    image: bitnami/redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ~/redis/data:/bitnami/redis/data
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
   
   consumer:
     container_name: 'consumer'
@@ -94,6 +110,9 @@ services:
       - AmazonS3__SecretKey=${S3_SECRET_KEY}
       - AmazonS3__PersistentBucketName=${S3_PERSISTENT_BUCKET_NAME}
       - Frontend__Url=${FRONTEND_URL}
+      - Redis__Host=redis
+      - Redis__Port=6379
+      - Redis__Password=${REDIS_PASSWORD}
     ports:
       - ${API_HTTP_PORT}:80
       - ${API_HTTPS_PORT}:443
@@ -104,6 +123,8 @@ services:
         condition: service_healthy
       migrator:
         condition: service_completed_successfully
+      redis:
+        condition: service_healthy
   
   frontend:
     container_name: 'frontend'
@@ -114,4 +135,3 @@ services:
       - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
     volumes:
       - ./src/frontend/chat/src:/app/src
-        
