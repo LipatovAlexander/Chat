@@ -48,6 +48,11 @@ public sealed class FileService : IFileService
 
 	public async Task MoveToPersistentBucketAsync(string fileId)
 	{
+		if (!await _s3.DoesS3BucketExistAsync(_s3Settings.PersistentBucketName))
+		{
+			await _s3.PutBucketAsync(_s3Settings.PersistentBucketName);
+		}
+
 		await _s3.CopyObjectAsync(_s3Settings.TempBucketName, fileId, _s3Settings.PersistentBucketName, fileId);
 		await _s3.DeleteObjectAsync(new DeleteObjectRequest
 		{
