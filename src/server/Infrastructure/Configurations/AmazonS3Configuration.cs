@@ -1,6 +1,5 @@
 using Amazon.Runtime;
 using Amazon.S3;
-using Infrastructure.Configurations;
 using Infrastructure.Configurations.Settings;
 
 // ReSharper disable once CheckNamespace

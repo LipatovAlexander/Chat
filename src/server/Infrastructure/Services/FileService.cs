@@ -8,7 +8,8 @@ namespace Infrastructure.Services;
 
 public interface IFileService
 {
-	Task SaveAsync(File file);
+	Task SaveToTempBucketAsync(File file);
+	Task MoveToPersistentBucketAsync(string fileId);
 	Task<File> GetAsync(string id);
 }
 
@@ -23,24 +24,36 @@ public sealed class FileService : IFileService
 		_s3Settings = s3SettingsOptions.Value;
 	}
 
-	public async Task SaveAsync(File file)
+	public async Task SaveToTempBucketAsync(File file)
 	{
-		if (!await _s3.DoesS3BucketExistAsync(_s3Settings.PersistentBucketName))
+		var bucket = _s3Settings.TempBucketName;
+		
+		if (!await _s3.DoesS3BucketExistAsync(bucket))
 		{
-			await _s3.PutBucketAsync(_s3Settings.PersistentBucketName);
+			await _s3.PutBucketAsync(bucket);
 		}
 
 		file.Id = Guid.NewGuid().ToString();
 
 		var request = new PutObjectRequest
 		{
-			BucketName = _s3Settings.PersistentBucketName,
+			BucketName = bucket,
 			Key = file.Id,
 			ContentType = file.ContentType,
 			InputStream = file.ContentStream
 		};
 
 		await _s3.PutObjectAsync(request);
+	}
+
+	public async Task MoveToPersistentBucketAsync(string fileId)
+	{
+		await _s3.CopyObjectAsync(_s3Settings.TempBucketName, fileId, _s3Settings.PersistentBucketName, fileId);
+		await _s3.DeleteObjectAsync(new DeleteObjectRequest
+		{
+			Key = fileId,
+			BucketName = _s3Settings.TempBucketName
+		});
 	}
 
 	public async Task<File> GetAsync(string id)

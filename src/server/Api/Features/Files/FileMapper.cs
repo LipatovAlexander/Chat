@@ -9,6 +9,4 @@ public static class FileMapper
 		ContentStream = formFile.OpenReadStream(),
 		ContentType = formFile.ContentType
 	};
-
-	public static UploadFileResponse MapToResponse(this File file) => new() { Id = file.Id };
 }

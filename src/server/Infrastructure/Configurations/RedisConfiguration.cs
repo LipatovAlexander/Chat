@@ -15,6 +15,7 @@ public static class RedisConfiguration
 		};
 		var redis = ConnectionMultiplexer.Connect(options);
 
+		services.ConfigureSettings(settings);
 		return services.AddSingleton<IConnectionMultiplexer>(redis);
 	}
 }
