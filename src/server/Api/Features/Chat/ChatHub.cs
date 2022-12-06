@@ -26,14 +26,9 @@ public sealed class ChatHub : Hub, IConsumer<UploadFinishedEvent>
 		await Clients.All.SendAsync("ReceiveMessage", message);
 	}
 
-	public async Task Upload(string requestId, string connectionId)
+	public async Task Upload(string requestId)
 	{
-		await _cacheService.SaveConnectionId(requestId, connectionId);
-	}
-
-	public override async Task OnConnectedAsync()
-	{
-		await Clients.Caller.SendAsync("ReceiveConnectionId", Context.ConnectionId);
+		await _cacheService.SaveConnectionId(requestId, Context.ConnectionId);
 	}
 
 	public async Task Consume(ConsumeContext<UploadFinishedEvent> context)
