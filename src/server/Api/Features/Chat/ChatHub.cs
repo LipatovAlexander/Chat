@@ -1,11 +1,12 @@
-﻿using Domain.Events;
+﻿using System.Diagnostics;
+using Domain.Events;
 using Infrastructure.Services;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Api.Features.Chat;
 
-public sealed class ChatHub : Hub, IConsumer<UploadFinishedEvent>
+public sealed class ChatHub : Hub
 {
 	private readonly IBus _bus;
 	private readonly ICacheService _cacheService;
@@ -29,13 +30,5 @@ public sealed class ChatHub : Hub, IConsumer<UploadFinishedEvent>
 	public async Task Upload(string requestId)
 	{
 		await _cacheService.SaveConnectionId(requestId, Context.ConnectionId);
-	}
-
-	public async Task Consume(ConsumeContext<UploadFinishedEvent> context)
-	{
-		var connectionId = await _cacheService.GetConnectionId(context.Message.RequestId)
-			?? throw new InvalidOperationException("ConnectionId associated with the passed RequestId not found");
-
-		await Clients.Client(connectionId).SendAsync("UploadFinished", new { fileId = context.Message.FileId });
 	}
 }

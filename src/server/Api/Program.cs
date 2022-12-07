@@ -1,3 +1,4 @@
+using Api;
 using Api.Extensions;
 using Api.Features.Chat;
 using Infrastructure.Configurations;
@@ -18,7 +19,7 @@ services.AddControllers()
 services.AddSignalR();
 services.AddMassTransit(brokerSettings, configurator =>
 {
-	configurator.AddConsumer<ChatHub>();
+	configurator.AddConsumer<SuccessConsumer>();
 });
 services.AddAmazonS3(amazonS3Settings);
 services.AddRedis(redisSettings);

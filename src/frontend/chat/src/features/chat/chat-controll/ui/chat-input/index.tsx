@@ -16,7 +16,8 @@ interface ChatInputProps {
 
 export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) => {
     const uploadRef = useRef<any>()
-    const file = useWatch('file', form)
+    const uploadedFile = uploaderModel.useUploadedFile()
+    const fileList = useMemo(() => (uploadedFile ? [uploadedFile] : []), [uploadedFile])
 
     useEffect(() => {
         uploaderModel.events.updateUploaderRef(uploadRef)
@@ -54,10 +55,8 @@ export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) =>
             <SimpleFormItem name={'text'}>
                 <TextArea disabled={chatLoading} autoSize={{ minRows: 3, maxRows: 3 }} onPressEnter={onPressEnter} />
             </SimpleFormItem>
-            <UploadForm hasFile={!!file}>
-                <SimpleFormItem name={'file'} valuePropName={'file'} getValueFromEvent={getValueFromUpload}>
-                    <Upload {...uploadConfig} ref={uploadRef} />
-                </SimpleFormItem>
+            <UploadForm hasFile={fileList.length > 0}>
+                <Upload {...uploadConfig} fileList={fileList} ref={uploadRef} />
             </UploadForm>
         </ChatInputBlock>
     )
