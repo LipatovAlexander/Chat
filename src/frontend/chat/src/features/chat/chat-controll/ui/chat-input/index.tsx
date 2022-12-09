@@ -1,9 +1,7 @@
-import { FormInstance, Upload, UploadProps } from 'antd'
-import { useWatch } from 'antd/es/form/Form'
+import { FormInstance, Upload } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import TextArea from 'antd/es/input/TextArea'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { urlToFile } from 'shared/consts'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { uploaderModel } from '../../model'
 import { MessageForm } from '../../types/message-from'
@@ -15,17 +13,8 @@ interface ChatInputProps {
 }
 
 export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) => {
-    const uploadRef = useRef<any>()
     const uploadedFile = uploaderModel.useUploadedFile()
     const fileList = useMemo(() => (uploadedFile ? [uploadedFile] : []), [uploadedFile])
-
-    useEffect(() => {
-        uploaderModel.events.updateUploaderRef(uploadRef)
-
-        return () => {
-            uploaderModel.events.updateUploaderRef(null)
-        }
-    }, [uploadRef.current])
 
     const onPressEnter = useCallback(
         (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -37,27 +26,19 @@ export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) =>
         [form, sendMessage],
     )
 
-    const uploadConfig = useMemo<UploadProps>(
-        () => ({
-            action: urlToFile,
-            listType: 'text',
-            maxCount: 1,
-        }),
+    const removeFile = useMemo(
+        () => () => {
+            uploaderModel.events.updateFile(null)
+        },
         [],
     )
-
-    const getValueFromUpload = useCallback((e: any) => {
-        return e.fileList.at(0)
-    }, [])
 
     return (
         <ChatInputBlock>
             <SimpleFormItem name={'text'}>
                 <TextArea disabled={chatLoading} autoSize={{ minRows: 3, maxRows: 3 }} onPressEnter={onPressEnter} />
             </SimpleFormItem>
-            <UploadForm hasFile={fileList.length > 0}>
-                <Upload {...uploadConfig} fileList={fileList} ref={uploadRef} />
-            </UploadForm>
+            <Upload fileList={fileList} onRemove={removeFile} />
         </ChatInputBlock>
     )
 }
@@ -70,8 +51,4 @@ const ChatInputBlock = styled.div`
 
 const SimpleFormItem = styled(FormItem)`
     margin: 0;
-`
-
-const UploadForm = styled.div<{ hasFile: boolean }>`
-    height: ${({ hasFile }) => (hasFile ? 'auto' : '0')};
 `

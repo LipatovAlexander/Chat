@@ -1,6 +1,6 @@
 import * as signalR from '@microsoft/signalr'
 import { messages } from '../model'
-import { connection as conModel } from '../model'
+import { connection as connectionModel } from '../model'
 import { MessageResp } from '../types/message'
 
 const connectToChatAndConfigure = async () => {
@@ -10,8 +10,8 @@ const connectToChatAndConfigure = async () => {
         messages.events.addNewMessage(message)
     })
 
-    connection.on('UploadFinished', ({ fileId }: any) => {
-        conModel.events.fileUploaded(fileId)
+    connection.on('UploadFinished', ({ fileId }: { fileId: string }) => {
+        connectionModel.events.fileWithMetadataUploaded(fileId)
     })
 
     await connection.start()

@@ -1,6 +1,6 @@
+import React from 'react'
 import { CloseOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons'
 import { Button, Popconfirm, Space, TableColumnType, Tooltip } from 'antd'
-import React from 'react'
 import styled from 'styled-components'
 
 type Action<T> = (record: T) => void

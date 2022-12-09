@@ -10,14 +10,14 @@ import { uploaderModel } from './model'
 
 const ChatControll = () => {
     const [form] = Form.useForm<MessageForm>()
+    const uploadedFile = uploaderModel.useUploadedFile()
+
     const userIp = userModel.useCurrentUserIp()
 
     const chatConnecting = chatModel.connection.useIsConnected()
     const userIpLoading = userModel.useUserIpLoading()
     const messageSending = chatModel.connection.useMessageSending()
     const chatLoading = chatConnecting || userIpLoading
-
-    const uploadedFile = uploaderModel.useUploadedFile()
 
     useEffect(() => {
         chatModel.connection.events.connectToChat()
@@ -26,13 +26,12 @@ const ChatControll = () => {
     const sendMessage = useCallback(
         (newMessage: MessageForm) => {
             if (!messageSending && newMessage.text) {
-                console.log(uploadedFile)
-
                 chatModel.connection.events.sendMessage({
                     text: newMessage.text,
                     fileId: uploadedFile?.uid,
                     ip: userIp.ipV4,
                 })
+
                 form.resetFields()
                 uploaderModel.events.updateFile(null)
             }

@@ -1,12 +1,6 @@
-import { TableColumnType } from 'antd'
 import React from 'react'
-
-interface FormField {
-    name: string
-    input: React.ReactNode
-    required?: boolean
-    valuePropName?: string
-}
+import { TableColumnType } from 'antd'
+import { FormField } from 'shared/types/ui'
 
 export type EditableTableColumnType<T> = Omit<TableColumnType<T>, 'dataIndex'> & {
     dataField: keyof T
