@@ -1,4 +1,4 @@
-﻿namespace Api.Chat;
+﻿namespace Api.Features.Chat;
 
 public sealed class SendMessageRequest
 {

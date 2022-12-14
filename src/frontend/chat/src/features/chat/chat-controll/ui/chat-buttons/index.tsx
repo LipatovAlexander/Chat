@@ -4,6 +4,7 @@ import { useWatch } from 'antd/es/form/Form'
 import { MessageForm } from '../../types/message-from'
 import { AttachFileButton } from './attach-file-button'
 import { SendButton } from './send-button'
+import { uploaderModel } from '../../model'
 
 interface ButtonsProps {
     form: FormInstance<MessageForm>
@@ -12,7 +13,7 @@ interface ButtonsProps {
 
 export const ChatButtons = ({ form, buttonsDisabled }: ButtonsProps) => {
     const text = useWatch('text', form)
-    const file = useWatch('file', form)
+    const file = uploaderModel.useUploadedFile()
 
     return (
         <>

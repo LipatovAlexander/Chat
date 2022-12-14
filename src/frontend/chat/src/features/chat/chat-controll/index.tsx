@@ -6,9 +6,12 @@ import { Form } from 'antd'
 import { MessageForm } from './types/message-from'
 import { ChatInput } from './ui/chat-input'
 import { ChatButtons } from './ui/chat-buttons'
+import { uploaderModel } from './model'
 
 const ChatControll = () => {
     const [form] = Form.useForm<MessageForm>()
+    const uploadedFile = uploaderModel.useUploadedFile()
+
     const userIp = userModel.useCurrentUserIp()
 
     const chatConnecting = chatModel.connection.useIsConnected()
@@ -25,13 +28,15 @@ const ChatControll = () => {
             if (!messageSending && newMessage.text) {
                 chatModel.connection.events.sendMessage({
                     text: newMessage.text,
-                    fileId: newMessage.file?.response?.id,
+                    fileId: uploadedFile?.uid,
                     ip: userIp.ipV4,
                 })
+
                 form.resetFields()
+                uploaderModel.events.updateFile(null)
             }
         },
-        [userIp, form, messageSending],
+        [userIp, form, messageSending, uploadedFile],
     )
 
     return (

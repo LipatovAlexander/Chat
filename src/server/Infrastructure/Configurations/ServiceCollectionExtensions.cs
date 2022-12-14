@@ -1,15 +1,14 @@
 using Infrastructure.Configurations.Settings;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Configurations;
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
 	public static void ConfigureSettings<TSettings>(this IServiceCollection services, TSettings settings)
 		where TSettings: class, ISettings
 	{
-		var options = Options.Create(settings);
+		var options = Options.Options.Create(settings);
 		services.AddSingleton(options);
 	}
 }

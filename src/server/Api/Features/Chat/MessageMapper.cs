@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Api.Chat;
+namespace Api.Features.Chat;
 
 public static class MessageMapper
 {

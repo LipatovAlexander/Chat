@@ -9,5 +9,6 @@ public sealed class AmazonS3Settings : ISettings
 	public required string AccessKey { get; set; }
 	public required string SecretKey { get; set; }
 	
+	public required string TempBucketName { get; set; }
 	public required string PersistentBucketName { get; set; }
 }

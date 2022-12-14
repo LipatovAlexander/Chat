@@ -3,7 +3,7 @@ using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Api.History;
+namespace Api.Features.History;
 
 [ApiController]
 [Route("/api/[controller]")]

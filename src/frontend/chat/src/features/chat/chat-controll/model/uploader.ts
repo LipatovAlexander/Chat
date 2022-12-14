@@ -1,17 +1,27 @@
+import { UploadFile } from 'antd'
 import { createEvent, createStore, forward } from 'effector'
 import { useStore } from 'effector-react'
+import { chatModel } from 'entities/chat'
 
-const $uploaderRef = createStore<any | null>(null)
-
-const updateUploaderRef = createEvent<any | null>()
+const $uploadedFileId = createStore<string | null>(null)
 
 forward({
-    from: updateUploaderRef,
-    to: $uploaderRef,
+    from: chatModel.connection.events.fileWithMetadataUploaded,
+    to: $uploadedFileId,
 })
 
-export const useUploaderRef = () => useStore($uploaderRef)
+const $uploadedFile = createStore<UploadFile | null>(null)
+
+const updateUploadedFile = createEvent<UploadFile | null>()
+
+forward({
+    from: updateUploadedFile,
+    to: $uploadedFile,
+})
+
+export const useUploadedFileId = () => useStore($uploadedFileId)
+export const useUploadedFile = () => useStore($uploadedFile)
 
 export const events = {
-    updateUploaderRef,
+    updateFile: updateUploadedFile,
 }
