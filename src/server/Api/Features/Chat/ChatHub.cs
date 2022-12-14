@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Domain.Events;
+﻿using Domain.Events;
 using Infrastructure.Services;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;

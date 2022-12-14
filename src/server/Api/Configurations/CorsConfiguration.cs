@@ -1,8 +1,9 @@
 ﻿using Api.Configurations.Settings;
 
-namespace Api.Extensions;
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection;
 
-public static class ApplicationBuilderExtensions
+public static class CorsConfiguration
 {
 	public static IApplicationBuilder UseCorsForFrontend(this IApplicationBuilder app, IConfiguration config)
 	{
