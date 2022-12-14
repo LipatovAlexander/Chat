@@ -1,18 +1,16 @@
-﻿using System.Diagnostics;
-using Api.Features.Chat;
-using Domain.Events;
+﻿using Domain.Events;
 using Infrastructure.Services;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Api;
+namespace Api.Features.Chat;
 
-public class SuccessConsumer: IConsumer<UploadFinishedEvent>
+public sealed class UploadFinishedConsumer : IConsumer<UploadFinishedEvent>
 {
 	private readonly IHubContext<ChatHub> _hubContext;
 	private readonly ICacheService _cacheService;
 	
-	public SuccessConsumer(IHubContext<ChatHub> hubContext, ICacheService cacheService)
+	public UploadFinishedConsumer(IHubContext<ChatHub> hubContext, ICacheService cacheService)
 	{
 		_hubContext = hubContext;
 		_cacheService = cacheService;

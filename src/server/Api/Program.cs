@@ -19,7 +19,7 @@ services.AddControllers()
 services.AddSignalR();
 services.AddMassTransit(brokerSettings, configurator =>
 {
-	configurator.AddConsumer<SuccessConsumer>();
+	configurator.AddConsumer<UploadFinishedConsumer>();
 });
 services.AddAmazonS3(amazonS3Settings);
 services.AddRedis(redisSettings);
