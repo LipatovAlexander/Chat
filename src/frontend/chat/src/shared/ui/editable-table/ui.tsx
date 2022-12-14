@@ -13,9 +13,12 @@ type EditableTableProps<T> = Omit<TableProps<T>, 'data' | 'columns'> & {
     onChange?: (value: T[]) => void
 }
 
-export const EditableTable = <T extends object>(props: EditableTableProps<T>) => {
-    const { columns, onChange = () => {}, value: data = [], uniqueKey } = props
-
+export const EditableTable = <T extends object>({
+    columns,
+    onChange = () => {},
+    value: data = [],
+    uniqueKey,
+}: EditableTableProps<T>) => {
     const [editableRow, setEditableRow] = useState<T | null>()
     const [isNewRow, setIsNewRow] = useState(false)
     const [form] = Form.useForm<T | null>()
@@ -38,7 +41,9 @@ export const EditableTable = <T extends object>(props: EditableTableProps<T>) =>
                 form.setFieldsValue(record)
             },
             (record) => deleteRecord(record),
-            () => form.submit(),
+            () => {
+                form.submit()
+            },
             (record) => {
                 if (isNewRow) {
                     deleteRecord(record)
@@ -55,6 +60,7 @@ export const EditableTable = <T extends object>(props: EditableTableProps<T>) =>
         newData.push({ ...editableRow!, ...value })
         onChange(newData)
 
+        setIsNewRow(false)
         setEditableRow(null)
     }
 
