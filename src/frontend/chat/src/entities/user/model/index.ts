@@ -1,37 +1,43 @@
-import { createEffect, createEvent, createStore, forward, sample } from 'effector'
+import { createEffect, createStore, forward } from 'effector'
 import { useStore } from 'effector-react'
-import { getCurrentUserIp } from 'shared/utils'
-import { defaultUserIp } from '../conf'
+import jwtDecode from 'jwt-decode'
+import { getToken, setToken } from 'shared/local-storage'
+import { auth } from '../api/auth'
+import { User } from '../types'
 
-interface UserIp {
-    ipV4: string
-}
+const $user = createStore<User>({ isAuthenticated: false, username: '' })
 
-const $userIp = createStore<UserIp>({ ipV4: defaultUserIp })
+const authFx = createEffect(async (data: { username: string }) => {
+    const resp = await auth(data)
+    const { jwt } = resp.data
 
-const loadCurrentUserIp = createEvent()
+    setToken(jwt)
+})
 
-const loadCurrentUserIpFx = createEffect(async () => {
-    return await getCurrentUserIp()
+const loadUserFx = createEffect(() => {
+    const token = getToken()
+    const userInfo = token ? jwtDecode<{ username: string }>(token) : null
+
+    return {
+        isAuthenticated: !!userInfo,
+        username: userInfo?.username ?? '',
+    }
 })
 
 forward({
-    from: loadCurrentUserIp,
-    to: loadCurrentUserIpFx,
+    from: authFx.doneData,
+    to: loadUserFx,
 })
 
-sample({
-    clock: loadCurrentUserIpFx.doneData,
-    filter: (ip) => !!ip,
-    fn: (ipV4) => ({
-        ipV4: ipV4!,
-    }),
-    target: $userIp,
+forward({
+    from: loadUserFx.doneData,
+    to: $user,
 })
 
-export const useCurrentUserIp = () => useStore($userIp)
-export const useUserIpLoading = () => useStore(loadCurrentUserIpFx.pending)
+export const useUser = () => useStore($user)
+export const useAuthenticating = () => useStore(authFx.pending)
 
-export const events = {
-    loadCurrentUserIp,
+export const effects = {
+    authFx,
+    loadUserFx,
 }
