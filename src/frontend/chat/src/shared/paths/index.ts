@@ -1,4 +1,4 @@
 export const Routes = {
-    CHAT: '/chat',
+    CHAT: '/',
     LOGIN: '/login',
 }
