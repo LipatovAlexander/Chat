@@ -9,7 +9,7 @@ public sealed class Conversations : ForwardOnlyMigration
 	{
 		Create.Table("User")
 			.WithColumn("Username").AsString().PrimaryKey()
-			.WithColumn("ChatMateUsername").AsString();
+			.WithColumn("ChatMateUsername").AsString().Nullable();
 
 		Create.ForeignKey()
 			.FromTable("User").ForeignColumn("ChatMateUsername")
