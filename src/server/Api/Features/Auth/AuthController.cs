@@ -19,7 +19,7 @@ public sealed class AuthController : ControllerBase
 	[AllowAnonymous]
 	public async Task<IActionResult> Login([FromBody] LoginRequest request)
 	{
-		var jwtToken = await _authService.IssueJwtAsync(request.Username);
+		var jwtToken = await _authService.LoginAsync(request.Username);
 
 		var response = new LoginResponse
 		{

@@ -4,10 +4,11 @@ namespace Api.Features.Chat;
 
 public static class MessageMapper
 {
-	public static Message MapToMessage(this SendMessageRequest request) => new()
+	public static Message MapToMessage(this SendMessageRequest request, User sender) => new()
 	{
-		Ip = request.Ip,
 		Text = request.Text,
-		FileId = request.FileId
+		FileId = request.FileId,
+		Sender = sender,
+		Receiver = sender.ChatMate!,
 	};
 }
