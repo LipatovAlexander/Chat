@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Events;
 
 namespace Api.Features.Chat;
 
@@ -12,5 +13,15 @@ public static class MessageMapper
 		SenderUsername = sender.Username,
 		Receiver = sender.ChatMate!,
 		ReceiverUsername = sender.ChatMate!.Username
+	};
+
+	public static MessageCreatedEvent MapToEvent(this Message message) => new()
+	{
+		Id = message.Id,
+		Text = message.Text,
+		FileId = message.FileId,
+		CreatedAt = message.CreatedAt,
+		SenderUsername = message.SenderUsername,
+		ReceiverUsername = message.ReceiverUsername
 	};
 }

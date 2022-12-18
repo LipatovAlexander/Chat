@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Domain.Entities;
+﻿namespace Domain.Entities;
 
 public sealed class Message
 {
@@ -9,9 +7,9 @@ public sealed class Message
 	public string? FileId { get; set; }
 	public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
-	public required User Sender { get; set; }
+	public User Sender { get; set; } = default!;
 	public required string SenderUsername { get; set; }
 
-	public required User Receiver { get; set; }
+	public User Receiver { get; set; } = default!;
 	public required string ReceiverUsername { get; set; }
 }
