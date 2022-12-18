@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace Domain.Entities;
 
 public sealed class Message
 {
@@ -8,6 +10,8 @@ public sealed class Message
 	public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
 	public required User Sender { get; set; }
-	
+	public required string SenderUsername { get; set; }
+
 	public required User Receiver { get; set; }
+	public required string ReceiverUsername { get; set; }
 }

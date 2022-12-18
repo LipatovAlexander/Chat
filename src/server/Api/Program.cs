@@ -28,6 +28,7 @@ services.AddFileService();
 services.AddCacheService();
 services.AddMetadataService();
 services.AddAuthService();
+services.AddChatConnector<ChatHub>();
 
 services.AddCors();
 

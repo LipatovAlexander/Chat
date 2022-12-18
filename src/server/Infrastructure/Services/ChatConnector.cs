@@ -1,4 +1,3 @@
-using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,11 +35,14 @@ public sealed class ChatConnector : IChatConnector
 			return;
 		}
 
-		var chatMate = await _dbContext.Users
-			.FirstOrDefaultAsync(u => u.IsAdmin != user.IsAdmin && u.ChatMate == null);
+		var chatMate = (await _dbContext.Users
+			.Where(u => u.ChatMate == null)
+			.ToListAsync())
+			.FirstOrDefault(u => u.IsAdmin != user.IsAdmin);
 
 		if (chatMate is null)
 		{
+			await _dbContext.SaveChangesAsync();
 			return;
 		}
 

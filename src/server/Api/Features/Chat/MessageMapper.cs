@@ -9,6 +9,8 @@ public static class MessageMapper
 		Text = request.Text,
 		FileId = request.FileId,
 		Sender = sender,
+		SenderUsername = sender.Username,
 		Receiver = sender.ChatMate!,
+		ReceiverUsername = sender.ChatMate!.Username
 	};
 }

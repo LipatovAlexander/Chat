@@ -7,9 +7,7 @@ import { MessageResp } from '../types/message'
 const connectToChatAndConfigure = async () => {
     const connection = new signalR.HubConnectionBuilder()
         .withUrl(`${process.env.REACT_APP_API_URL}/api/chat`, {
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
+            accessTokenFactory: () => getToken() ?? '',
         })
         .build()
 
