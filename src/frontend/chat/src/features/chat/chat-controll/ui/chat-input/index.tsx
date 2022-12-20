@@ -8,11 +8,11 @@ import { MessageForm } from '../../types/message-from'
 
 interface ChatInputProps {
     sendMessage: (newMessage: MessageForm) => void
-    chatLoading: boolean
+    disabled: boolean
     form: FormInstance<MessageForm>
 }
 
-export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) => {
+export const ChatInput = ({ sendMessage, disabled, form }: ChatInputProps) => {
     const uploadedFile = uploaderModel.useUploadedFile()
     const fileList = useMemo(() => (uploadedFile ? [uploadedFile] : []), [uploadedFile])
 
@@ -36,7 +36,7 @@ export const ChatInput = ({ sendMessage, chatLoading, form }: ChatInputProps) =>
     return (
         <ChatInputBlock>
             <SimpleFormItem name={'text'}>
-                <TextArea disabled={chatLoading} autoSize={{ minRows: 3, maxRows: 3 }} onPressEnter={onPressEnter} />
+                <TextArea disabled={disabled} autoSize={{ minRows: 3, maxRows: 3 }} onPressEnter={onPressEnter} />
             </SimpleFormItem>
             <Upload fileList={fileList} onRemove={removeFile} />
         </ChatInputBlock>

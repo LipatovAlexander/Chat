@@ -5,6 +5,7 @@ import { Routes } from 'shared/paths'
 
 const Page = () => {
     const { isAuthenticated } = userModel.useUser()
+
     const location = useLocation()
 
     if (!isAuthenticated) {

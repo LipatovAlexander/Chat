@@ -1,6 +1,7 @@
 export interface Message {
     id: number
-    ip: string
+    senderUsername: string
+    receiverUsername: string
     text: string
     fileId?: string
     createdAt: Date

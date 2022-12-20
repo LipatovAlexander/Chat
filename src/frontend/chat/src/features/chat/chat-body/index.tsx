@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Message from './message'
 import { chatModel } from 'entities/chat'
@@ -8,27 +8,30 @@ import { userModel } from 'entities/user'
 
 const ChatBody = () => {
     const messages = chatModel.messages.useMessages()
-    const { username } = userModel.useUser()
+    const user = userModel.useUser()
 
     const messagesLoading = chatModel.messages.useMessagesLoading()
 
-    const chatLoading = messagesLoading
-
-    const isOwn = useCallback((ipFromMessage: string) => true, [])
-
     useEffect(() => {
-        chatModel.messages.events.loadMessages()
+        if (!user.isAdmin) {
+            chatModel.messages.events.loadMessages()
+        }
     }, [])
+
+    const isOwn = (senderUsername: string) =>
+        (user.isAdmin && senderUsername.startsWith('admin')) || user.username === senderUsername
 
     return (
         <ChatBodyBlock>
-            {chatLoading && (
+            {messagesLoading && (
                 <LoadingArea>
                     <Spin size="large" />
                 </LoadingArea>
             )}
-            {!chatLoading &&
-                messages.map((message) => <Message key={message.id} message={message} isOwn={isOwn(message.ip)} />)}
+            {!messagesLoading &&
+                messages.map((message) => (
+                    <Message key={message.id} message={message} isOwn={isOwn(message.senderUsername)} />
+                ))}
         </ChatBodyBlock>
     )
 }
@@ -49,4 +52,4 @@ const LoadingArea = styled.div`
     justify-content: center;
 `
 
-export default ChatBody
+export default React.memo(ChatBody)

@@ -159,12 +159,12 @@ services:
       redis:
         condition: service_healthy
   
-  frontend:
-    container_name: 'frontend'
-    build:
-      context: ./src/frontend/
-      dockerfile: chat/dockerfile
-    ports:
-      - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
-    volumes:
-      - ./src/frontend/chat/src:/app/src
+#  frontend:
+#    container_name: 'frontend'
+#    build:
+#      context: ./src/frontend/
+#      dockerfile: chat/dockerfile
+#    ports:
+#      - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
+#    volumes:
+#      - ./src/frontend/chat/src:/app/src

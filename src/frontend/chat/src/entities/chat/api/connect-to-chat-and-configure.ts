@@ -19,6 +19,14 @@ const connectToChatAndConfigure = async () => {
         connectionModel.events.fileWithMetadataUploaded(fileId)
     })
 
+    connection.on('JoinedRoom', () => {
+        connectionModel.events.newUserJoinedToRoom()
+    })
+
+    connection.on('LeftRoom', () => {
+        connectionModel.events.interlocutorLeftFromRoom()
+    })
+
     await connection.start()
 
     return connection

@@ -36,10 +36,19 @@ sample({
     target: $messages,
 })
 
+const clearMessage = createEvent()
+
+sample({
+    clock: clearMessage,
+    fn: () => [],
+    target: $messages,
+})
+
 export const useMessages = () => useStore($messages)
 export const useMessagesLoading = () => useStore(loadMessagesFx.pending)
 
 export const events = {
     loadMessages,
     addNewMessage,
+    clearMessage,
 }

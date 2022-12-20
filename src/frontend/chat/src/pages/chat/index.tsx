@@ -26,4 +26,4 @@ const ChatWindow = styled.div`
     height: 90vh;
 `
 
-export default ChatPage
+export default React.memo(ChatPage)
