@@ -159,12 +159,23 @@ services:
       redis:
         condition: service_healthy
   
-#  frontend:
-#    container_name: 'frontend'
-#    build:
-#      context: ./src/frontend/
-#      dockerfile: chat/dockerfile
-#    ports:
-#      - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
-#    volumes:
-#      - ./src/frontend/chat/src:/app/src
+  frontend:
+    container_name: 'frontend'
+    build:
+      context: ./src/frontend/
+      dockerfile: chat/dockerfile
+    ports:
+      - ${FRONTEND_LOCAL_PORT}:${FRONTEND_DOCKER_PORT}
+    volumes:
+      - ./src/frontend/chat/src:/app/src
+
+  mvc:
+    container_name: mvc
+    build:
+      dockerfile: ./src/TimMovie/Dockerfile
+    ports:
+      - '8080:80'
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=${POSTGRES_PORT};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};Database=timmovie
+    depends_on:
+      - postgres

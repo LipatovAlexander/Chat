@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using Domain.Events;
 using Infrastructure;
 using Infrastructure.Services;
 using MassTransit;
