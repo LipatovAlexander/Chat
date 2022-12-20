@@ -11,8 +11,8 @@ public static class MessageMapper
 		FileId = request.FileId,
 		Sender = sender,
 		SenderUsername = sender.Username,
-		Receiver = sender.ChatMate!,
-		ReceiverUsername = sender.ChatMate!.Username
+		Receiver = sender.ChatMate,
+		ReceiverUsername = sender.ChatMate?.Username
 	};
 
 	public static MessageCreatedEvent MapToEvent(this Message message) => new()

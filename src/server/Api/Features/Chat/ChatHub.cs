@@ -43,7 +43,14 @@ public sealed class ChatHub : Hub
 		var messageCreated = message.MapToEvent();
 		await _bus.Publish(messageCreated);
 
-		await Clients.Users(user.Username, user.ChatMate!.Username).SendAsync("ReceiveMessage", messageCreated);
+		if (user.ChatMate is not null)
+		{
+			await Clients.Users(user.Username, user.ChatMate.Username).SendAsync("ReceiveMessage", messageCreated);
+		}
+		else
+		{
+			await Clients.Users(user.Username).SendAsync("ReceiveMessage", messageCreated);
+		}
 	}
 
 	public async Task Upload(string requestId)

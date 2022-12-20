@@ -10,6 +10,6 @@ public sealed class Message
 	public User Sender { get; set; } = default!;
 	public required string SenderUsername { get; set; }
 
-	public User Receiver { get; set; } = default!;
-	public required string ReceiverUsername { get; set; }
+	public User? Receiver { get; set; }
+	public string? ReceiverUsername { get; set; }
 }

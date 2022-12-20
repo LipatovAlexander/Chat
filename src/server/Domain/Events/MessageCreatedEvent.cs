@@ -12,5 +12,5 @@ public sealed class MessageCreatedEvent : BaseEvent
 
 	public required string SenderUsername { get; set; }
 
-	public required string ReceiverUsername { get; set; }
+	public string? ReceiverUsername { get; set; }
 }
