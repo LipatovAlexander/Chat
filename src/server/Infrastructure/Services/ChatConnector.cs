@@ -1,3 +1,4 @@
+using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,10 +23,7 @@ public sealed class ChatConnector : IChatConnector
 	
 	public async Task ConnectAsync(string username, string connectionId)
 	{
-		var user = await _dbContext.Users
-			.Include(u => u.Connections)
-			.Include(u => u.ChatMate)
-			.FirstAsync(u => u.Username == username);
+		var user = await GetUserAsync(username);
 
 		user.AddConnection(connectionId);
 		
@@ -35,10 +33,7 @@ public sealed class ChatConnector : IChatConnector
 			return;
 		}
 
-		var chatMate = (await _dbContext.Users
-			.Where(u => u.ChatMate == null)
-			.ToListAsync())
-			.FirstOrDefault(u => u.IsAdmin != user.IsAdmin);
+		var chatMate = await GetFreeUserAsync(!user.IsAdmin);
 
 		if (chatMate is null)
 		{
@@ -46,23 +41,12 @@ public sealed class ChatConnector : IChatConnector
 			return;
 		}
 
-		user.ChatMate = chatMate;
-		await _dbContext.SaveChangesAsync();
-
-		chatMate.ChatMate = user;
-		await _dbContext.SaveChangesAsync();
-
-		await _hubContext.Clients
-			.Users(user.Username, user.ChatMate.Username)
-			.SendAsync("JoinedRoom");
+		await ConnectUsersAsync(user, chatMate);
 	}
 
 	public async Task DisconnectAsync(string username, string connectionId)
 	{
-		var user = await _dbContext.Users
-			.Include(u => u.Connections)
-			.Include(u => u.ChatMate)
-			.FirstAsync(u => u.Username == username);
+		var user = await GetUserAsync(username);
 
 		user.RemoveConnection(connectionId);
 
@@ -72,13 +56,57 @@ public sealed class ChatConnector : IChatConnector
 			return;
 		}
 
-		if (user.ChatMate is not null)
+		if (user.ChatMate is null)
 		{
-			await _hubContext.Clients.User(user.ChatMate.Username).SendAsync("LeftRoom");
-
-			user.ChatMate.ChatMate = null;
-			user.ChatMate = null;
-			await _dbContext.SaveChangesAsync();
+			return;
 		}
+
+		var chatMate = user.ChatMate;
+		await DisconnectUsersAsync(user, chatMate);
+
+		var newChatMate = await GetFreeUserAsync(!chatMate.IsAdmin);
+		
+		if (newChatMate is not null)
+		{
+			await ConnectUsersAsync(chatMate, newChatMate);
+		}
+	}
+
+	private async Task DisconnectUsersAsync(User user1, User user2)
+	{
+		await _hubContext.Clients.Users(user1.Username, user2.Username).SendAsync("LeftRoom");
+
+		user1.ChatMate = null;
+		user2.ChatMate = null;
+		await _dbContext.SaveChangesAsync();
+	}
+
+	private async Task<User> GetUserAsync(string username)
+	{
+		return await _dbContext.Users
+			.Include(u => u.Connections)
+			.Include(u => u.ChatMate)
+			.FirstAsync(u => u.Username == username);
+	}
+
+	private async Task<User?> GetFreeUserAsync(bool admin)
+	{
+		return (await _dbContext.Users
+				.Where(u => u.ChatMate == null && u.Connections.Any())
+				.ToListAsync())
+			.FirstOrDefault(u => u.IsAdmin == admin);
+	}
+
+	private async Task ConnectUsersAsync(User user1, User user2)
+	{
+		user1.ChatMate = user2;
+		await _dbContext.SaveChangesAsync();
+
+		user2.ChatMate = user1;
+		await _dbContext.SaveChangesAsync();
+
+		await _hubContext.Clients
+			.Users(user1.Username, user2.Username)
+			.SendAsync("JoinedRoom");
 	}
 }

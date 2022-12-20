@@ -1,12 +1,14 @@
 using Domain.Events;
 using Infrastructure.Services;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Features.Files;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public sealed class FileController : ControllerBase
 {
 	private readonly IFileService _fileService;
