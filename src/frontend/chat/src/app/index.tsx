@@ -1,8 +1,13 @@
-import { ChatPage } from 'pages'
-import React from 'react'
+import { userModel } from 'entities/user'
+import React, { useEffect } from 'react'
+import AppRoutes from './router'
 
 const App = () => {
-    return <ChatPage />
+    useEffect(() => {
+        userModel.effects.loadUserFx()
+    }, [])
+
+    return <AppRoutes />
 }
 
 export default App

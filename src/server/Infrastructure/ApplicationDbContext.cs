@@ -7,6 +7,7 @@ namespace Infrastructure;
 public sealed class ApplicationDbContext : DbContext
 {
 	public DbSet<Message> Messages => Set<Message>();
+	public DbSet<User> Users => Set<User>();
 
 	public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
 	{

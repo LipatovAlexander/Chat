@@ -1,4 +1,5 @@
-﻿using Domain.Events;
+﻿using Domain.Entities;
+using Domain.Events;
 using Infrastructure;
 using MassTransit;
 
@@ -15,7 +16,18 @@ public sealed class MessageCreatedConsumer : IConsumer<MessageCreatedEvent>
 
 	public async Task Consume(ConsumeContext<MessageCreatedEvent> context)
 	{
-		_dbContext.Messages.Add(context.Message.Message);
+		var message = MapToMessage(context.Message);
+		_dbContext.Messages.Add(message);
 		await _dbContext.SaveChangesAsync();
 	}
+
+	private static Message MapToMessage(MessageCreatedEvent createdEvent) => new()
+	{
+		Id = createdEvent.Id,
+		Text = createdEvent.Text,
+		FileId = createdEvent.FileId,
+		CreatedAt = createdEvent.CreatedAt,
+		SenderUsername = createdEvent.SenderUsername,
+		ReceiverUsername = createdEvent.ReceiverUsername
+	};
 }

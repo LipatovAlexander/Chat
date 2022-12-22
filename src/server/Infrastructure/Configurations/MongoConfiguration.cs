@@ -2,7 +2,8 @@ using Infrastructure.Configurations.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
-namespace Infrastructure.Configurations;
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class MongoConfiguration
 {

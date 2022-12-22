@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ChatBody, ChatControll } from 'features/chat'
 import styled from 'styled-components'
-import { userModel } from 'entities/user'
 
 const ChatPage = () => {
-    useEffect(() => {
-        userModel.events.loadCurrentUserIp()
-    }, [])
-
     return (
         <Block>
             <ChatWindow>
@@ -31,4 +26,4 @@ const ChatWindow = styled.div`
     height: 90vh;
 `
 
-export default ChatPage
+export default React.memo(ChatPage)

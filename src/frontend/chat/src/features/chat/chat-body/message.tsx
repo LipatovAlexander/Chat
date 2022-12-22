@@ -13,7 +13,7 @@ const Message = ({ message, isOwn }: MessageProps) => {
     return (
         <MessageBlock isOwn={isOwn}>
             <Content isOwn={isOwn}>
-                <Username>{message.ip}</Username>
+                <Username>{message.senderUsername}</Username>
                 <Text>{message.text}</Text>
                 {message.fileId && <File link={`${urlToFile}?id=${message.fileId}`} />}
             </Content>
